@@ -18,7 +18,9 @@ typedef struct s_map
 	int	**z;
 }		t_map;
 
-char	*parse_map(char *s_map);
-int		error(char *msg);
+int		parse_map(int fd, t_map *map);
+int		validate_args(char *file);
+void	error(char *msg);
+int		error_with_ret(char *msg);
 
 #endif

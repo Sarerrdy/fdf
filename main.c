@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
+/*   By: eina <eina@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 12:46:15 by eina              #+#    #+#             */
-/*   Updated: 2026/02/11 13:43:29 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/13 17:27:59 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 
 int main(int argc, char **argv)
 {
-    if (argc != 2)
-    {
-        ft_printf("Usuage: ./program <map_file>\n");
-        return ;
-    } 
+    int fd;
+    t_map *map;
     
-    if (argv[1] != NULL)
-        parse_map(argv[1]);
-    else
-        ft_printf("Error!: Map cannot be empty\n");
+    if (argc != 2)
+        return(error_with_ret("Usuage> ./program <map_file>"));
+    if (!validate_args(argv[1]))
+        return (error_with_ret("Invalid args"));
+    fd = open(argv[1], O_RDONLY);
+    if (fd < 0)
+        return (error_with_ret("cannot open map file"));
+    parse_map(fd, map);
+    close(fd);
+    return (0);
 }

@@ -3,42 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
+/*   By: eina <eina@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/02/11 16:27:01 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/13 17:42:18 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	is_valid_file(char *file)
+static char	**allocatemap(t_map *map, char *line)
 {
-	char	*file_name_len;
-	char	*file_ext;
+	int	x;
+	int	y;
+	int	*row;
 
-	file_ext = ft_strrchr(file, '.');
-	file_name_len = file_ext - file;
-	if (file_name_len < 1)
-		return (0);
-	if (ft_strncmp(".fdf", file_ext, ft_strlen(file_ext)) == 0)
-		return (1);
-	else
-		return (0);
+	map->z = ft_calloc(sizeof(int *), map->height);
+	if (!map->z)
+	{
+		error("map allocation failed");
+		return (-1);
+	}
+	y = 0;
+	while (y < map->height)
+	{
+		map->z[y] = ft_calloc(sizeof(int), map->width);
+		x = 0;
+		map->z[y] = ft_split(line, ' ');
+		while (map->z[y][x])
+		{			
+			map->z[y][x] = ft_atoi(map->z[y][x]);
+			x++;
+		}
+		y++;
+	}
 }
-char	*parse_map(char *s_map)
+
+int	parse_map(int fd, t_map *map)
 {
-    int fd;
-    
-	if (!is_valid_file(s_map))
-        return (error("Invalid file name or extension"));
-    fd = open(fd, O_RDONLY);
-    if (fd < 0)
-        return ("opening file failed");
-    char *line = get_next_line(fd);
-    if (!line)
-        return (error("Empty file"));
-    if (line[0])
-        return (error("Empty line in map"));
-    
+	int		len;
+	char	*line;
+
+	line = get_next_line(fd);
+	if (!line || line[0] == '\0')
+	{
+		error("Empty file");
+		return (-1);
+	}
+	map->width = ft_strlen(line);
+	if (map->width > 0 && line[map->width - 1] == '\n')
+	{
+		map->width--;
+		map->height = 1;
+		allocatemap(map, line);
+	}
+	while (line = get_next_line(fd) != NULL)
+	{
+		len = ft_strlen(line);
+		if (line[len - 1] == '\n')
+			len--;
+		if (len != map->width)
+		{
+			error("Map is not rectangular");
+			return (-1);
+		}
+		map->height++;
+		allocatemap(map, line);
+		free(line);
+	}
+	return (1);
 }
