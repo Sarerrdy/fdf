@@ -1,26 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 11:54:27 by eina              #+#    #+#             */
-/*   Updated: 2025/11/21 17:42:45 by eina             ###   ########.fr       */
+/*   Created: 2026/02/13 18:58:16 by eina              #+#    #+#             */
+/*   Updated: 2026/02/18 21:38:46 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_BONUS_H
-# define GET_NEXT_LINE_BONUS_H
+#include "fdf.h"
 
-# include <limits.h>
-# include <stddef.h>
-# include <stdlib.h>
-# include <unistd.h>
+char	*ft_free(int **arr, int count)
+{
+	int	i;
 
-char	*get_next_line(int fd);
-void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-char	*ft_strchr(const char *s, int c);
-#endif
+	i = 0;
+	while (i < count)
+		free(arr[i++]);
+	free(arr);
+	return (NULL);
+}
+
+char	*ft_free_str(t_map *map)
+{
+	int	i;
+
+	i = 0;
+	while (i < map->height)
+		free(map->z[i++]);
+	free(map->z);
+	return (NULL);
+}
+
+char	*ft_free_char(char **arr, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+		free(arr[i++]);
+	free(arr);
+	return (NULL);
+}

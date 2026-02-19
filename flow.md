@@ -198,3 +198,12 @@ void project_iso(t_point *p)
   - Keep files focused: `parse.c`, `draw.c`, `project.c`, `controls.c`, `bresenham.c`, `main.c`
 
 ---
+
+The correct FdF parsing architecture
+Every working FdF project uses this pattern:
+
+Step 1 — Read all lines into a temporary array
+Step 2 — Determine width and height
+Step 3 — Allocate map->z once
+Step 4 — Parse each line into map->z[y][x]
+Step 5 — Free temporary lines

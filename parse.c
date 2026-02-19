@@ -3,73 +3,135 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eina <eina@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/02/13 17:42:18 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/18 22:28:08 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static char	**allocatemap(t_map *map, char *line)
+static int	*allocate_map_values(char *line)
 {
-	int	x;
-	int	y;
-	int	*row;
+	char	**tmparr;
+	int		*tmpline;
+	int		i;
 
-	map->z = ft_calloc(sizeof(int *), map->height);
-	if (!map->z)
+	if (!line || line[0] == '\0')
+		return (error_with_nullret("Empty file during allocation"));
+	tmparr = ft_split(line, ' ');
+	if (!tmparr)
+		return (error_with_nullret("error with split during allocation"));
+	i = 0;
+	while (tmparr[i])
+		i++;
+	tmpline = calloc(sizeof(int), i);
+	if (!tmpline)
 	{
-		error("map allocation failed");
-		return (-1);
+		ft_free_char(tmparr, i);
+		return (error_with_nullret("error with split during allocation"));
 	}
-	y = 0;
-	while (y < map->height)
+	i = -1;
+	while (tmparr[++i])
+		tmpline[i] = ft_atoi(tmparr[i]);
+	ft_free_char(tmparr, i);
+	return (tmpline);
+}
+
+static int	set_width(char *line)
+{
+	char	**tmparr;
+	int		*tmpline;
+	int		i;
+
+	if (!line || line[0] == '\0')
+		return (error_with_intret("Empty file"));
+	tmparr = ft_split(line, ' ');
+	if (!tmparr)
+		return (error_with_intret("error with split"));
+	i = 0;
+	while (tmparr[i])
+		i++;
+	tmpline = calloc(sizeof(int), i);
+	if (!tmpline)
 	{
-		map->z[y] = ft_calloc(sizeof(int), map->width);
-		x = 0;
-		map->z[y] = ft_split(line, ' ');
-		while (map->z[y][x])
-		{			
-			map->z[y][x] = ft_atoi(map->z[y][x]);
-			x++;
-		}
-		y++;
+		ft_free_char(tmparr, i);
+		return (error_with_intret("error with split"));
+	}
+	i = -1;
+	while (tmparr[++i])
+		tmpline[i] = ft_atoi(tmparr[i]);
+	free(tmpline);
+	ft_free_char(tmparr, i);
+	return (i);
+}
+
+static void	drain_gnl(int fd)
+{
+	char	*tmp;
+
+	tmp = get_next_line(fd);
+	while (tmp)
+	{
+		free(tmp);
+		tmp = get_next_line(fd);
 	}
 }
 
-int	parse_map(int fd, t_map *map)
+static int	set_map_dimension(int fd, t_map *map)
 {
-	int		len;
 	char	*line;
+	int		len;
 
 	line = get_next_line(fd);
-	if (!line || line[0] == '\0')
+	map->width = set_width(line);
+	if (map->width == -1)
+		return (free(line), -1);
+	free(line);
+	map->height = 1;
+	line = get_next_line(fd);
+	while (line)
 	{
-		error("Empty file");
-		return (-1);
-	}
-	map->width = ft_strlen(line);
-	if (map->width > 0 && line[map->width - 1] == '\n')
-	{
-		map->width--;
-		map->height = 1;
-		allocatemap(map, line);
-	}
-	while (line = get_next_line(fd) != NULL)
-	{
-		len = ft_strlen(line);
-		if (line[len - 1] == '\n')
-			len--;
-		if (len != map->width)
+		len = set_width(line);
+		if (len != -1 && len != map->width)
 		{
-			error("Map is not rectangular");
-			return (-1);
+			free(line);
+			drain_gnl(fd);
+			return (error_with_intret("Map is not square"));
 		}
 		map->height++;
-		allocatemap(map, line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	return (1);
+}
+
+int	parse_map(char *data, t_map *map)
+{
+	char	*line;
+	int		fd;
+	int		i;
+
+	fd = open(data, O_RDONLY);
+	if (fd < 0)
+		return (error_with_intret("cannot open map file"));
+	if (set_map_dimension(fd, map) == -1)
+		return (close(fd), (-1));
+	close(fd);
+	map->z = ft_calloc(map->height + 1, sizeof(int *));
+	if (!map->z)
+		return (error_with_intret("Calloc error"));
+	fd = open(data, O_RDONLY);
+	i = -1;
+	line = get_next_line(fd);
+	while (line)
+	{
+		map->z[++i] = allocate_map_values(line);
+		if (!map->z[i])
+			return (free(line), close(fd), -1);
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (close(fd), 1);
 }

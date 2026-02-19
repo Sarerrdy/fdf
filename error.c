@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eina <eina@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 15:29:44 by eina              #+#    #+#             */
-/*   Updated: 2026/02/13 16:54:19 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/18 21:41:43 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,21 @@ void	error(char *msg)
 {
 	ft_putstr_fd("Error!: ", 2);
 	ft_putstr_fd(msg, 2);
-	ft_putstr_fd('\n', 2);
+	ft_putstr_fd("\n", 2);
 }
 
-int	error_with_ret(char *msg)
+int	error_with_intret(char *msg)
 {
 	ft_putstr_fd("Error!: ", 2);
 	ft_putstr_fd(msg, 2);
-	ft_putstr_fd('\n', 2);
-	return(-1);
+	ft_putstr_fd("\n", 2);
+	return (-1);
+}
+
+int	*error_with_nullret(char *msg)
+{
+	ft_putstr_fd("Error!: ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
+	return (NULL);
 }

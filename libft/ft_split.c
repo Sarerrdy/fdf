@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/11 11:33:27 by eina              #+#    #+#             */
-/*   Updated: 2026/02/11 07:58:15 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/13 20:53:01 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	**freearr(char **strarr)
 
 	i = 0;
 	if (!strarr)
-		return ;
+		return (NULL);
 	while (strarr[i])
 	{
 		free(strarr[i]);

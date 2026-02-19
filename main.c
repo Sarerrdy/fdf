@@ -1,30 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main.ch                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eina <eina@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/11 12:46:15 by eina              #+#    #+#             */
-/*   Updated: 2026/02/13 17:27:59 by eina             ###   ########.fr       */
+/*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
+/*   Updated: 2026/02/18 21:47:54 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int main(int argc, char **argv)
+static void	printmap(t_map *map)
 {
-    int fd;
-    t_map *map;
-    
-    if (argc != 2)
-        return(error_with_ret("Usuage> ./program <map_file>"));
-    if (!validate_args(argv[1]))
-        return (error_with_ret("Invalid args"));
-    fd = open(argv[1], O_RDONLY);
-    if (fd < 0)
-        return (error_with_ret("cannot open map file"));
-    parse_map(fd, map);
-    close(fd);
-    return (0);
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			ft_putnbr_fd(map->z[y][x], 1);
+			ft_putchar_fd(' ', 1);
+			x++;
+		}
+		ft_putchar_fd('\n', 1);
+		y++;
+	}
+}
+
+int	main(int argc, char **argv)
+{
+	t_map	map;
+	char	*data;
+
+	map = (t_map){0};
+	data = argv[1];
+	if (argc != 2)
+		return (error_with_intret("Usuage> ./program <map_file>"));
+	if (!validate_args(argv[1]))
+		return (error_with_intret("Invalid args"));
+	if (parse_map(data, &map) != -1)
+		printmap(&map);
+	else
+		return (-1);
+	ft_free_str(&map);
+	return (0);
 }
