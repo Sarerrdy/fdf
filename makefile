@@ -3,13 +3,19 @@ NAME = fdf
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -I. -g
 
-SRCS = main.c \
-		parse.c \
-		validate_args.c \
-		ft_free.c \
-		error.c \
-		get_next_line/get_next_line.c \
-		get_next_line/get_next_line_utils.c
+SRCS = \
+    src/parse/parse.c \
+    src/parse/validate_args.c \
+    src/draw/draw.c \
+    src/draw/draw_line.c \
+    src/draw/pixel.c \
+    src/draw/z_range.c \
+    src/project/project.c \
+    src/utils/cleanup.c \
+    src/utils/error.c \
+    get_next_line/get_next_line.c \
+    get_next_line/get_next_line_utils.c \
+    main.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -17,16 +23,24 @@ LIBFT = libft/libft.a
 
 LIBFTPRINTF = libftprintf/libftprintf.a
 
+MLX_DIR = minilibx
+MLX_LIB = $(MLX_DIR)/libmlx.a
+
+MLX = -Lminilibx -lmlx -lXext -lX11 -lm
+
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF)
-		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(LIBFTPRINTF) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF) $(MLX_LIB)
+		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(LIBFTPRINTF) $(MLX) -o $(NAME)
 
 $(LIBFT):
 		$(MAKE) -C libft
 
 $(LIBFTPRINTF):
 		$(MAKE)	 -C libftprintf
+
+$(MLX_LIB):
+	$(MAKE) -C $(MLX_DIR)
 
 clean:
 		rm -f $(OBJS)

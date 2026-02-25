@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free.c                                          :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 18:58:16 by eina              #+#    #+#             */
-/*   Updated: 2026/02/18 21:38:46 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 10:34:09 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-char	*ft_free(int **arr, int count)
+char	*free_int_matrix(int **arr, int count)
 {
 	int	i;
 
@@ -23,7 +23,18 @@ char	*ft_free(int **arr, int count)
 	return (NULL);
 }
 
-char	*ft_free_str(t_map *map)
+char	*free_char_matrix(char **arr, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+		free(arr[i++]);
+	free(arr);
+	return (NULL);
+}
+
+char	*free_map(t_map *map)
 {
 	int	i;
 
@@ -34,13 +45,18 @@ char	*ft_free_str(t_map *map)
 	return (NULL);
 }
 
-char	*ft_free_char(char **arr, int count)
+void	cleanup_fdf(t_fdf *fdf)
 {
-	int	i;
-
-	i = 0;
-	while (i < count)
-		free(arr[i++]);
-	free(arr);
-	return (NULL);
+	if (!fdf)
+		return ;
+	free_map(&fdf->map);
+	if (fdf->img.img)
+		mlx_destroy_image(fdf->mlx, fdf->img.img);
+	if (fdf->win)
+		mlx_destroy_window(fdf->mlx, fdf->win);
+	if (fdf->mlx)
+	{
+		mlx_destroy_display(fdf->mlx);
+		free(fdf->mlx);
+	}
 }

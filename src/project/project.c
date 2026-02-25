@@ -1,36 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   project.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/11 15:29:44 by eina              #+#    #+#             */
-/*   Updated: 2026/02/18 21:41:43 by eina             ###   ########.fr       */
+/*   Created: 2026/02/25 01:56:38 by eina              #+#    #+#             */
+/*   Updated: 2026/02/25 10:20:14 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	error(char *msg)
+static void	project_iso(t_point *p, float angle)
 {
-	ft_putstr_fd("Error!: ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
+	float	prev_x;
+	float	prev_y;
+
+	prev_x = p->x;
+	prev_y = p->y;
+	p->x = (prev_x - prev_y) * cos(angle);
+	p->y = (prev_x + prev_y) * sin(angle) - p->z;
 }
 
-int	error_with_intret(char *msg)
+t_point	project(t_fdf *fdf, int x, int y)
 {
-	ft_putstr_fd("Error!: ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
-}
+	t_point p;
 
-int	*error_with_nullret(char *msg)
-{
-	ft_putstr_fd("Error!: ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (NULL);
+	p.x = x * fdf->zoom;
+	p.y = y * fdf->zoom;
+	p.z = fdf->map.z[y][x] * fdf->z_scale;
+	project_iso(&p, fdf->angle);
+	p.x += fdf->offset_x;
+	p.y += fdf->offset_y;
+	return (p);
 }
