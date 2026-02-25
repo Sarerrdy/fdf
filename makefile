@@ -21,32 +21,25 @@ OBJS = $(SRCS:.c=.o)
 
 LIBFT = libft/libft.a
 
-LIBFTPRINTF = libftprintf/libftprintf.a
-
-MLX_DIR = minilibx
-MLX_LIB = $(MLX_DIR)/libmlx.a
-
-MLX_FLAGS = -Lminilibx -lmlx -lXext -lX11 -lm
+MLX_FLAGS = -lmlx -lXext -lX11 -lm
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF)
-		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(LIBFTPRINTF) $(MLX_FLAGS) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
+		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 $(LIBFT):
 		$(MAKE) -C libft
 
-$(LIBFTPRINTF):
-		$(MAKE)	 -C libftprintf
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 		rm -f $(OBJS)
 		$(MAKE) -C libft clean
-		$(MAKE) -C libftprintf clean
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C libft fclean
-	$(MAKE) -C libftprintf fclean
 
 re: fclean all

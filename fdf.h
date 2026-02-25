@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:35:40 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 12:08:55 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 12:43:07 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 
 # include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
-# include "libftprintf/ft_printf.h"
-// # include "minilibx/mlx.h"
 # include <mlx.h>
 # include <fcntl.h>
 # include <math.h>
@@ -61,7 +59,6 @@ typedef struct s_fdf
 {
 	void	*mlx;
 	void	*win;
-	// void	*img;
 	char	*addr;
 	int		bpp;
 	int		line_len;
@@ -92,7 +89,6 @@ t_point		project(t_fdf *fdf, int x, int y);
 void		compute_z_range(t_fdf *fdf);
 void		draw_line(t_fdf *fdf, t_point a, t_point b, int color);
 void		draw_grid(t_fdf *fdf);
-
 void		cleanup_fdf(t_fdf *fdf);
 
 #endif
