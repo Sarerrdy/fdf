@@ -26,21 +26,18 @@ LIBFTPRINTF = libftprintf/libftprintf.a
 MLX_DIR = minilibx
 MLX_LIB = $(MLX_DIR)/libmlx.a
 
-MLX = -Lminilibx -lmlx -lXext -lX11 -lm
+MLX_FLAGS = -Lminilibx -lmlx -lXext -lX11 -lm
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF) $(MLX_LIB)
-		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(LIBFTPRINTF) $(MLX) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT) $(LIBFTPRINTF)
+		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(LIBFTPRINTF) $(MLX_FLAGS) -o $(NAME)
 
 $(LIBFT):
 		$(MAKE) -C libft
 
 $(LIBFTPRINTF):
 		$(MAKE)	 -C libftprintf
-
-$(MLX_LIB):
-	$(MAKE) -C $(MLX_DIR)
 
 clean:
 		rm -f $(OBJS)

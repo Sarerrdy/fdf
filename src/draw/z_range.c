@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 09:39:54 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 10:19:30 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 11:53:03 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	compute_z_range(t_fdf *fdf)
 {
-	int y;
-	int x;
-	int z;
+	int	y;
+	int	x;
+	int	z;
 
 	y = 0;
 	fdf->min_z = fdf->map.z[0][0];

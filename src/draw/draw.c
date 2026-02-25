@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 09:42:56 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 09:46:50 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 11:59:21 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int	choose_color(int z)
 		return (0xFFFFFF);
 	return (0x0000FF);
 }
+
 static void	draw_horizontal_segment(t_fdf *fdf, int x, int y)
 {
 	int	z1;
@@ -34,6 +35,7 @@ static void	draw_horizontal_segment(t_fdf *fdf, int x, int y)
 	color = choose_color(z);
 	draw_line(fdf, project(fdf, x, y), project(fdf, x + 1, y), color);
 }
+
 static void	draw_vertical_segment(t_fdf *fdf, int x, int y)
 {
 	int	z1;

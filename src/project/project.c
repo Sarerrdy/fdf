@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 01:56:38 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 10:20:14 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 11:51:18 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	project_iso(t_point *p, float angle)
 
 t_point	project(t_fdf *fdf, int x, int y)
 {
-	t_point p;
+	t_point	p;
 
 	p.x = x * fdf->zoom;
 	p.y = y * fdf->zoom;

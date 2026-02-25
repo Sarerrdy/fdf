@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:35:40 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 10:33:53 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/25 12:08:55 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
 # include "libftprintf/ft_printf.h"
-# include "minilibx/mlx.h"
+// # include "minilibx/mlx.h"
+# include <mlx.h>
 # include <fcntl.h>
 # include <math.h>
 # include <stdlib.h>
