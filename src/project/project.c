@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 01:56:38 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 11:51:18 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/27 16:32:05 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ t_point	project(t_fdf *fdf, int x, int y)
 	p.x = x * fdf->zoom;
 	p.y = y * fdf->zoom;
 	p.z = fdf->map.z[y][x] * fdf->z_scale;
+	rotate_x(&p, fdf->rot_x);
+	rotate_y(&p, fdf->rot_y);
+	rotate_z(&p, fdf->rot_z);
 	project_iso(&p, fdf->angle);
 	p.x += fdf->offset_x;
 	p.y += fdf->offset_y;

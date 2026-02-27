@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 01:04:57 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/27 12:58:24 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	*allocate_map_values(char *line)
 	i = 0;
 	while (tmparr[i])
 		i++;
-	tmpline = calloc(sizeof(int), i);
+	tmpline = ft_calloc(sizeof(int), i);
 	if (!tmpline)
 	{
 		free_char_matrix(tmparr, i);
@@ -53,7 +53,7 @@ static int	set_width(char *line)
 	i = 0;
 	while (tmparr[i])
 		i++;
-	tmpline = calloc(sizeof(int), i);
+	tmpline = ft_calloc(sizeof(int), i);
 	if (!tmpline)
 	{
 		free_char_matrix(tmparr, i);
@@ -98,7 +98,7 @@ static int	set_map_dimension(int fd, t_map *map)
 		{
 			free(line);
 			drain_gnl(fd);
-			return (error_ret_int("Map is not square"));
+			return (error_ret_int("Map must have equal width"));
 		}
 		map->height++;
 		free(line);

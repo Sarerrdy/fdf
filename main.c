@@ -6,16 +6,19 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 12:59:25 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/27 16:30:14 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	init_defaults(t_fdf *fdf)
+void	init_defaults(t_fdf *fdf)
 {
 	fdf->zoom = 20;
 	fdf->z_scale = 0.5;
+	fdf->rot_x = 0.0f;
+	fdf->rot_y = 0.0f;
+	fdf->rot_z = 0.0f;
 	fdf->angle = 0.523599;
 	fdf->color = 0xFFFFFF;
 	fdf->offset_x = WIDTH / 2;
@@ -42,26 +45,11 @@ static int	handle_key(int key, t_fdf *fdf)
 {
 	if (key == KEY_ESC)
 		close_window(fdf);
-	if (key == KEY_UP)
-		fdf->offset_y -= 10;
-	if (key == KEY_DOWN)
-		fdf->offset_y += 10;
-	if (key == KEY_LEFT)
-		fdf->offset_x -= 10;
-	if (key == KEY_RIGHT)
-		fdf->offset_x += 10;
-	if (key == KEY_PLUS)
-		fdf->zoom += 1;
-	if (key == KEY_MINUS)
-		fdf->zoom -= 1;
-	if (key == 'w')
-		fdf->z_scale += 0.1;
-	if (key == 's')
-		fdf->z_scale -= 0.1;
-	if (key == 'a')
-		fdf->angle -= 0.05;
-	if (key == 'd')
-		fdf->angle += 0.05;
+	handle_move(key, fdf);
+	handle_zoom(key, fdf);
+	handle_zscale(key, fdf);
+	handle_rotation(key, fdf);
+	handle_reset(key, fdf);
 	redraw(fdf);
 	return (0);
 }

@@ -83,13 +83,19 @@ fdf/
 
 ## Controls
 
-| Key        | Action               |
-|------------|----------------------|
-| Arrows     | Move view            |
-| `+` / `-`  | Zoom in/out          |
-| `W` / `S`  | Increase/decrease Z  |
-| `A` / `D`  | Rotate left/right    |
-| `ESC`      | Exit program         |
+## Controls
+
+| Key        | Action                                    |
+|------------|-------------------------------------------|
+| Arrows     | Move view left/right/up/down              |
+| `+` / `-`  | Zoom in/out                               |
+| `T` / `G`  | Increase/decrease height (Z‑scale)        |
+| `W` / `S`  | Rotate around X‑axis (tilt up/down)       |
+| `A` / `D`  | Rotate around Z‑axis (spin left/right)    |
+| `Q` / `E`  | Rotate around Y‑axis (lean left/right)    |
+| `R`        | Reset to default values                   |
+| `ESC`      | Exit program                              |
+
 
 ---
 
@@ -102,6 +108,14 @@ fdf/
 - Isometric projection math
 - UNIX graphics programming basics
 - X11 event handling
+
+### **How AI was used**
+AI assistance (Microsoft Copilot) was used for:
+- structuring the README
+- clarifying project concepts
+- explaining Bresenham’s line algorithm and how it applies to this fdf
+- simplify Isometric projection math with some adaptable sample code
+- ensuring Norm‑friendly organization
 
 ---
 

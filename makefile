@@ -10,7 +10,9 @@ SRCS = \
     src/draw/draw_line.c \
     src/draw/pixel.c \
     src/draw/z_range.c \
+    src/project/rotate.c \
     src/project/project.c \
+    src/control/control.c \
     src/utils/cleanup.c \
     src/utils/error.c \
     get_next_line/get_next_line.c \

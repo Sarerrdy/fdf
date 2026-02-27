@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:35:40 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 12:43:07 by eina             ###   ########.fr       */
+/*   Updated: 2026/02/27 16:24:14 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 
 # include "get_next_line/get_next_line.h"
 # include "libft/libft.h"
-# include <mlx.h>
 # include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -71,6 +71,10 @@ typedef struct s_fdf
 	int		max_z;
 	int		offset_x;
 	int		offset_y;
+	float	rot_x;
+	float	rot_y;
+	float	rot_z;
+
 	t_map	map;
 	t_img	img;
 }			t_fdf;
@@ -83,12 +87,23 @@ int			error_ret_int(char *msg);
 char		*free_int_matrix(int **arr, int count);
 char		*free_char_matrix(char **arr, int count);
 char		*free_map(t_map *map);
+void		cleanup_fdf(t_fdf *fdf);
+
+t_point		project(t_fdf *fdf, int x, int y);
+void		rotate_x(t_point *p, float angle);
+void		rotate_y(t_point *p, float angle);
+void		rotate_z(t_point *p, float angle);
 
 void		put_pixel(t_fdf *fdf, int x, int y, int color);
-t_point		project(t_fdf *fdf, int x, int y);
 void		compute_z_range(t_fdf *fdf);
 void		draw_line(t_fdf *fdf, t_point a, t_point b, int color);
 void		draw_grid(t_fdf *fdf);
-void		cleanup_fdf(t_fdf *fdf);
+
+void		handle_move(int key, t_fdf *fdf);
+void		handle_zoom(int key, t_fdf *fdf);
+void		handle_zscale(int key, t_fdf *fdf);
+void		handle_rotation(int key, t_fdf *fdf);
+void		handle_reset(int key, t_fdf *fdf);
+void		init_defaults(t_fdf *fdf);
 
 #endif
