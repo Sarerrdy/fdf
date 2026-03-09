@@ -6,132 +6,116 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/02/27 12:58:24 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/09 23:15:34 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <ctype.h>
 
-static int	*allocate_map_values(char *line)
+static t_row	*parse_line(char *line, int *width)
 {
-	char	**tmparr;
-	int		*tmpline;
-	int		i;
+	int		w;
+	t_row	*r;
 
-	if (!line || line[0] == '\0')
-		return (error_ret_null("Empty file during allocation"));
-	tmparr = ft_split(line, ' ');
-	if (!tmparr)
-		return (error_ret_null("error with split during allocation"));
-	i = 0;
-	while (tmparr[i])
-		i++;
-	tmpline = ft_calloc(sizeof(int), i);
-	if (!tmpline)
+	w = count_tokens(line);
+	if (w <= 0)
+		return (print_error("Invalid line"), NULL);
+	if (*width == -1)
+		*width = w;
+	else if (w != *width)
+		return (print_error("Width mismatch"), NULL);
+	r = new_row(w);
+	if (!r)
+		return (print_error("Allocation error"), NULL);
+	if (!fill_row_fast(line, r->z, r->color, w))
 	{
-		free_char_matrix(tmparr, i);
-		return (error_ret_null("error with split during allocation"));
+		free(r->z);
+		free(r->color);
+		free(r);
+		return (NULL);
 	}
-	i = -1;
-	while (tmparr[++i])
-		tmpline[i] = ft_atoi(tmparr[i]);
-	free_char_matrix(tmparr, i);
-	return (tmpline);
+	return (r);
 }
 
-static int	set_width(char *line)
+static int	ensure_capacity(t_row ***rows, int *cap, int height, char *line)
 {
-	char	**tmparr;
-	int		*tmpline;
-	int		i;
+	t_row	**tmp;
 
-	if (!line || line[0] == '\0')
-		return (error_ret_int("Empty file"));
-	tmparr = ft_split(line, ' ');
-	if (!tmparr)
-		return (error_ret_int("error with split"));
-	i = 0;
-	while (tmparr[i])
-		i++;
-	tmpline = ft_calloc(sizeof(int), i);
-	if (!tmpline)
-	{
-		free_char_matrix(tmparr, i);
-		return (error_ret_int("error with split"));
-	}
-	i = -1;
-	while (tmparr[++i])
-		tmpline[i] = ft_atoi(tmparr[i]);
-	free(tmpline);
-	free_char_matrix(tmparr, i);
-	return (i);
+	if (height < *cap)
+		return (1);
+	*cap *= 2;
+	tmp = ft_realloc(*rows, sizeof(t_row *) * (*cap / 2), sizeof(t_row *)
+			* (*cap));
+	if (!tmp)
+		return (free(line), print_error("Realloc failed"), -1);
+	*rows = tmp;
+	return (1);
 }
 
-static void	drain_gnl(int fd)
-{
-	char	*tmp;
-
-	tmp = get_next_line(fd);
-	while (tmp)
-	{
-		free(tmp);
-		tmp = get_next_line(fd);
-	}
-}
-
-static int	set_map_dimension(int fd, t_map *map)
+static int	read_all_rows(int fd, t_row ***rows, t_map *m)
 {
 	char	*line;
-	int		len;
+	int		cap;
 
-	line = get_next_line(fd);
-	map->width = set_width(line);
-	if (map->width == -1)
-		return (free(line), -1);
-	free(line);
-	map->height = 1;
+	cap = 1024;
+	*rows = malloc(sizeof(t_row *) * cap);
+	if (!*rows)
+		return (print_error("Allocation error"), -1);
 	line = get_next_line(fd);
 	while (line)
 	{
-		len = set_width(line);
-		if (len != -1 && len != map->width)
-		{
-			free(line);
-			drain_gnl(fd);
-			return (error_ret_int("Map must have equal width"));
-		}
-		map->height++;
+		if (ensure_capacity(rows, &cap, m->height, line) < 0)
+			return (-1);
+		(*rows)[m->height] = parse_line(line, &m->width);
 		free(line);
+		if (!(*rows)[m->height])
+			return (gnl_drain(fd), -1);
+		m->height++;
 		line = get_next_line(fd);
 	}
 	return (1);
 }
 
-int	parse_map(char *data, t_map *map)
+static int	finalize_map(t_map *m, t_row **rows)
 {
-	char	*line;
-	int		fd;
-	int		i;
+	int	y;
 
-	fd = open(data, O_RDONLY);
-	if (fd < 0)
-		return (error_ret_int("cannot open map file"));
-	if (set_map_dimension(fd, map) == -1)
-		return (close(fd), (-1));
-	close(fd);
-	map->z = ft_calloc(map->height + 1, sizeof(int *));
-	if (!map->z)
-		return (error_ret_int("Calloc error"));
-	fd = open(data, O_RDONLY);
-	i = -1;
-	line = get_next_line(fd);
-	while (line)
+	m->z = malloc(sizeof(int *) * m->height);
+	m->color = malloc(sizeof(int *) * m->height);
+	if (!m->z || !m->color)
 	{
-		map->z[++i] = allocate_map_values(line);
-		if (!map->z[i])
-			return (free(line), close(fd), -1);
-		free(line);
-		line = get_next_line(fd);
+		free(m->z);
+		free(m->color);
+		return (print_error("Allocation error"), -1);
 	}
-	return (close(fd), 1);
+	y = 0;
+	while (y < m->height)
+	{
+		m->z[y] = rows[y]->z;
+		m->color[y] = rows[y]->color;
+		y++;
+	}
+	return (1);
+}
+
+int	parse_map(char *file, t_map *m)
+{
+	t_row	**rows;
+	int		fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (error_ret_int("Cannot open file"));
+	m->height = 0;
+	m->width = -1;
+	if (read_all_rows(fd, &rows, m) == -1)
+		return (close(fd), free_row_array(rows, m->height, -1), -1);
+	close(fd);
+	if (m->height == 0 || m->width == -1)
+		return (free_row_array(rows, m->height, -1), print_error("Empty map"),
+			-1);
+	if (finalize_map(m, rows) == -1)
+		return (free_row_array(rows, m->height, -1), -1);
+	return (free_row_array(rows, m->height, 0), 1);
 }

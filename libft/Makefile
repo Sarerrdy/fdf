@@ -1,12 +1,12 @@
-NAME    := libft.a
-CC      := cc
-CFLAGS  := -Wall -Wextra -Werror
-AR      := ar
+NAME := libft.a
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
+AR := ar
 ARFLAGS := rcs
-RM      := rm -f
+RM := rm -f
 
 SRC_CHAR := \
-	ft_isalpha.c ft_isdigit.c ft_isalnum.c \
+	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isspace.c \
 	ft_isascii.c ft_isprint.c ft_toupper.c ft_tolower.c
 
 SRC_STRING := \
@@ -16,10 +16,10 @@ SRC_STRING := \
 
 SRC_MEMORY := \
 	ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c ft_memchr.c \
-	ft_memcmp.c ft_calloc.c
+	ft_memcmp.c ft_calloc.c ft_realloc.c
 
 SRC_CONVERT := \
-	ft_atoi.c ft_itoa.c
+	ft_atoi.c ft_itoa.c ft_atoi_base.c
 
 SRC_ITER := \
 	ft_strmapi.c ft_striteri.c

@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
-/*   Updated: 2026/02/27 16:30:14 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/09 22:08:11 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,22 @@
 
 void	init_defaults(t_fdf *fdf)
 {
-	fdf->zoom = 20;
-	fdf->z_scale = 0.5;
+	float	zoom_x;
+	float	zoom_y;
+
+	zoom_x = (float)WIDTH / (float)fdf->map.width / 2.0f;
+	zoom_y = (float)HEIGHT / (float)fdf->map.height / 2.0f;
+	if (zoom_x < zoom_y)
+		fdf->zoom = zoom_x;
+	else
+		fdf->zoom = zoom_y;
 	fdf->rot_x = 0.0f;
 	fdf->rot_y = 0.0f;
 	fdf->rot_z = 0.0f;
-	fdf->angle = 0.523599;
-	fdf->color = 0xFFFFFF;
+	fdf->angle = 0.523599f;
 	fdf->offset_x = WIDTH / 2;
-	fdf->offset_y = HEIGHT / 3;
+	fdf->offset_y = HEIGHT / 2;
+	fdf->color = 0xFFFFFF;
 }
 
 static int	close_window(t_fdf *fdf)

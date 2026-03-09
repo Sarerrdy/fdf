@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/27 15:47:45 by eina              #+#    #+#             */
-/*   Updated: 2026/02/27 16:23:51 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/09 22:14:20 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,21 @@ void	handle_move(int key, t_fdf *fdf)
 void	handle_zoom(int key, t_fdf *fdf)
 {
 	if (key == KEY_PLUS)
-		fdf->zoom += 1;
+		fdf->zoom += 1.0f;
 	if (key == KEY_MINUS)
-		fdf->zoom -= 1;
+		fdf->zoom -= 1.0f;
+	if (fdf->zoom < 0.1f)
+		fdf->zoom = 0.1f;
 }
 
 void	handle_zscale(int key, t_fdf *fdf)
 {
 	if (key == 't')
-		fdf->z_scale += 0.1;
+		fdf->z_scale += 0.05f;
 	if (key == 'g')
-		fdf->z_scale -= 0.1;
+		fdf->z_scale -= 0.05f;
+	if (fdf->z_scale < 0.0f)
+		fdf->z_scale = 0.0f;
 }
 
 void	handle_rotation(int key, t_fdf *fdf)

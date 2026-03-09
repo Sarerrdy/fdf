@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -I. -g
 
 SRCS = \
     src/parse/parse.c \
+    src/parse/parse_utils.c \
     src/parse/validate_args.c \
     src/draw/draw.c \
     src/draw/draw_line.c \
@@ -33,7 +34,7 @@ $(NAME): $(OBJS) $(LIBFT)
 $(LIBFT):
 		$(MAKE) -C libft
 
-%.o: %.c
+%.o: %.c fdf.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

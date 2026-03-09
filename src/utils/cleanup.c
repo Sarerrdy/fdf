@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 18:58:16 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 10:34:09 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/09 02:14:34 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,13 @@ char	*free_map(t_map *map)
 
 	i = 0;
 	while (i < map->height)
-		free(map->z[i++]);
+	{
+		free(map->z[i]);
+		free(map->color[i]);
+		i++;
+	}
 	free(map->z);
+	free(map->color);
 	return (NULL);
 }
 
@@ -58,5 +63,32 @@ void	cleanup_fdf(t_fdf *fdf)
 	{
 		mlx_destroy_display(fdf->mlx);
 		free(fdf->mlx);
+	}
+}
+
+void	free_row_array(t_row **rows, int count, int errflag)
+{
+	int	i;
+
+	i = 0;
+	if (errflag == -1)
+	{
+		while (i < count)
+		{
+			free(rows[i]->z);
+			free(rows[i]->color);
+			free(rows[i]);
+			i++;
+		}
+		free(rows);
+	}
+	else
+	{
+		while (i < count)
+		{
+			free(rows[i]);
+			i++;
+		}
+		free(rows);
 	}
 }

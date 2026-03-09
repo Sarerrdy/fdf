@@ -6,14 +6,14 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 00:57:39 by eina              #+#    #+#             */
-/*   Updated: 2026/02/11 12:09:36 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/05 03:26:51 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 10
+# define BUFFER_SIZE 32768
 #endif
 
 static char	*ft_freeupdate(char *old, char *new, char *extra)

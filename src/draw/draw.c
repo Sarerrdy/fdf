@@ -6,57 +6,41 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 09:42:56 by eina              #+#    #+#             */
-/*   Updated: 2026/02/25 12:25:30 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/09 20:26:45 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	choose_color(int z)
-{
-	if (z == 0)
-		return (0xFFFFFF);
-	return (0x0000FF);
-}
-
 static void	draw_horizontal_segment(t_fdf *fdf, int x, int y)
 {
-	int	z1;
-	int	z2;
-	int	z;
-	int	color;
+	t_point	a;
+	t_point	b;
 
-	z1 = fdf->map.z[y][x] * fdf->z_scale;
-	z2 = fdf->map.z[y][x + 1] * fdf->z_scale;
-	if (z1 > z2)
-		z = z1;
-	else
-		z = z2;
-	color = choose_color(z);
-	draw_line(fdf, project(fdf, x, y), project(fdf, x + 1, y), color);
+	a = project(fdf, x, y);
+	b = project(fdf, x + 1, y);
+	a.color = fdf->map.color[y][x];
+	b.color = fdf->map.color[y][x + 1];
+	draw_line(fdf, a, b);
 }
 
 static void	draw_vertical_segment(t_fdf *fdf, int x, int y)
 {
-	int	z1;
-	int	z2;
-	int	z;
-	int	color;
+	t_point	a;
+	t_point	b;
 
-	z1 = fdf->map.z[y][x] * fdf->z_scale;
-	z2 = fdf->map.z[y + 1][x] * fdf->z_scale;
-	if (z1 > z2)
-		z = z1;
-	else
-		z = z2;
-	color = choose_color(z);
-	draw_line(fdf, project(fdf, x, y), project(fdf, x, y + 1), color);
+	a = project(fdf, x, y);
+	b = project(fdf, x, y + 1);
+	a.color = fdf->map.color[y][x];
+	b.color = fdf->map.color[y + 1][x];
+	draw_line(fdf, a, b);
 }
 
 void	draw_grid(t_fdf *fdf)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	t_point	p;
 
 	y = 0;
 	while (y < fdf->map.height)
@@ -71,5 +55,10 @@ void	draw_grid(t_fdf *fdf)
 			x++;
 		}
 		y++;
+	}
+	if (fdf->map.width == 1 && fdf->map.height == 1)
+	{
+		p = project(fdf, 0, 0);
+		put_pixel(fdf, p.x, p.y, fdf->map.color[0][0]);
 	}
 }
