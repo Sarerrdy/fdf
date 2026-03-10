@@ -6,12 +6,11 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/03/09 23:15:34 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 13:37:39 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <ctype.h>
 
 static t_row	*parse_line(char *line, int *width)
 {

@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
-/*   Updated: 2026/03/09 22:08:11 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 15:27:41 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,43 @@ void	init_defaults(t_fdf *fdf)
 	fdf->color = 0xFFFFFF;
 }
 
-static int	close_window(t_fdf *fdf)
+static int	init_mlx(t_fdf *fdf)
 {
-	cleanup_fdf(fdf);
-	exit(0);
+	fdf->mlx = mlx_init();
+	if (!fdf->mlx)
+		return (error_ret_int("MLX init failed"));
+	fdf->win = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FDF");
+	if (!fdf->win)
+		return (cleanup_fdf(fdf), error_ret_int("MLX window failed"));
+	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	if (!fdf->img.img)
+		return (cleanup_fdf(fdf), error_ret_int("MLX image failed"));
+	fdf->addr = mlx_get_data_addr(fdf->img.img, &fdf->bpp, &fdf->line_len,
+			&fdf->endian);
+	if (!fdf->addr)
+		return (cleanup_fdf(fdf), error_ret_int("MLX data addr failed"));
+	return (0);
 }
 
 static void	redraw(t_fdf *fdf)
 {
-	mlx_destroy_image(fdf->mlx, fdf->img.img);
+	if (fdf->img.img)
+		mlx_destroy_image(fdf->mlx, fdf->img.img);
 	fdf->img.img = mlx_new_image(fdf->mlx, WIDTH, HEIGHT);
+	if (!fdf->img.img)
+	{
+		print_error("MLX image failed");
+		cleanup_fdf(fdf);
+		exit(1);
+	}
 	fdf->addr = mlx_get_data_addr(fdf->img.img, &fdf->bpp, &fdf->line_len,
 			&fdf->endian);
+	if (!fdf->addr)
+	{
+		print_error("MLX data addr failed");
+		cleanup_fdf(fdf);
+		exit(1);
+	}
 	draw_grid(fdf);
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img.img, 0, 0);
 }
@@ -74,11 +99,8 @@ int	main(int argc, char **argv)
 		return (-1);
 	compute_z_range(&fdf);
 	init_defaults(&fdf);
-	fdf.mlx = mlx_init();
-	fdf.win = mlx_new_window(fdf.mlx, WIDTH, HEIGHT, "FDF");
-	fdf.img.img = mlx_new_image(fdf.mlx, WIDTH, HEIGHT);
-	fdf.addr = mlx_get_data_addr(fdf.img.img, &fdf.bpp, &fdf.line_len,
-			&fdf.endian);
+	if (init_mlx(&fdf) == -1)
+		return (-1);
 	draw_grid(&fdf);
 	mlx_put_image_to_window(fdf.mlx, fdf.win, fdf.img.img, 0, 0);
 	mlx_key_hook(fdf.win, handle_key, &fdf);

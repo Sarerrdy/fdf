@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:35:40 by eina              #+#    #+#             */
-/*   Updated: 2026/03/09 23:17:09 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 15:19:03 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ int			fill_row_fast(char *line, int *z, int *color, int width);
 t_row		*new_row(int width);
 int			count_tokens(char *p);
 void		free_row_array(t_row **rows, int count, int errflag);
+int			parse_token(char **p, int *z_val, int *color_val);
 void		gnl_drain(int fd);
 
 void		print_error(char *msg);
@@ -119,6 +120,7 @@ char		*free_int_matrix(int **arr, int count);
 char		*free_char_matrix(char **arr, int count);
 char		*free_map(t_map *map);
 void		cleanup_fdf(t_fdf *fdf);
+int			close_window(t_fdf *fdf);
 
 t_point		project(t_fdf *fdf, int x, int y);
 void		rotate_x(t_point *p, float angle);

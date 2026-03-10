@@ -6,6 +6,7 @@ CFLAGS = -Wall -Wextra -Werror -I. -g
 SRCS = \
     src/parse/parse.c \
     src/parse/parse_utils.c \
+    src/parse/validate_tokens.c \
     src/parse/validate_args.c \
     src/draw/draw.c \
     src/draw/draw_line.c \

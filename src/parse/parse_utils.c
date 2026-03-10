@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 02:15:18 by eina              #+#    #+#             */
-/*   Updated: 2026/03/09 23:17:49 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 14:13:07 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,6 @@ int	count_tokens(char *p)
 	return (count);
 }
 
-static void	skip_color(char **p, int *color)
-{
-	if (**p == '0' && (*p)[1] == 'x')
-		*color = ft_atoi_base(*p + 2, 16);
-	else
-		*color = ft_atoi_base(*p, 16);
-	while (**p && **p != ' ')
-		(*p)++;
-}
-
 int	fill_row_fast(char *line, int *z, int *color, int width)
 {
 	int		x;
@@ -49,20 +39,10 @@ int	fill_row_fast(char *line, int *z, int *color, int width)
 	x = 0;
 	while (*p == ' ')
 		p++;
-	while (*p && x < width)
+	while (*p && *p != '\n' && x < width)
 	{
-		z[x] = ft_atoi(p);
-		while (*p && *p != ' ' && *p != ',')
-			p++;
-		if (*p == ',')
-		{
-			p++;
-			skip_color(&p, &color[x]);
-		}
-		else
-			color[x] = 0xFFFFFF;
-		while (*p == ' ')
-			p++;
+		if (!parse_token(&p, &z[x], &color[x]))
+			return (0);
 		x++;
 	}
 	return (x == width);
