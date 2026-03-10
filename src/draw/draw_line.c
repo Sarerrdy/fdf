@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 09:33:03 by eina              #+#    #+#             */
-/*   Updated: 2026/03/09 20:30:47 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 15:54:18 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	init_line(t_line *l, t_point a, t_point b)
 	l->y0 = (int)a.y;
 	l->x1 = (int)b.x;
 	l->y1 = (int)b.y;
-	l->dx = abs(l->x1 - l->x0);
-	l->dy = -abs(l->y1 - l->y0);
+	l->dx = ft_abs(l->x1 - l->x0);
+	l->dy = -ft_abs(l->y1 - l->y0);
 	l->sx = (l->x0 < l->x1) - (l->x0 > l->x1);
 	l->sy = (l->y0 < l->y1) - (l->y0 > l->y1);
 	l->err = l->dx + l->dy;

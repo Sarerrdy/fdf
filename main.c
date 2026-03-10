@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 15:27:41 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 16:04:58 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	init_defaults(t_fdf *fdf)
 	float	zoom_x;
 	float	zoom_y;
 
+	compute_z_range(fdf);
 	zoom_x = (float)WIDTH / (float)fdf->map.width / 2.0f;
 	zoom_y = (float)HEIGHT / (float)fdf->map.height / 2.0f;
 	if (zoom_x < zoom_y)
