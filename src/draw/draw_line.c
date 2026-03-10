@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 09:33:03 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 15:54:18 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/10 16:15:49 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ static float	get_t(t_line *l, int x, int y)
 
 	if (l->dx >= -l->dy)
 	{
-		dist = abs(x - l->x0);
+		dist = ft_abs(x - l->x0);
 		total = (float)l->dx;
 	}
 	else
 	{
-		dist = abs(y - l->y0);
+		dist = ft_abs(y - l->y0);
 		total = (float)(-l->dy);
 	}
 	if (total == 0)
