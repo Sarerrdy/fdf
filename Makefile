@@ -23,7 +23,10 @@ SRCS = \
 
 OBJS = $(SRCS:.c=.o)
 
-LIBFT = libft/libft.a
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_SRCS = $(wildcard $(LIBFT_DIR)/*.c)
+LIBFT_HDRS = $(LIBFT_DIR)/libft.h
 
 MLX_FLAGS = -lmlx -lXext -lX11 -lm
 
@@ -32,8 +35,8 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT)
 		$(CC) $(CFLAGS) $(OBJS)	$(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
-$(LIBFT):
-		$(MAKE) -C libft
+$(LIBFT): $(LIBFT_SRCS) $(LIBFT_HDRS) $(LIBFT_DIR)/Makefile
+	$(MAKE) -C $(LIBFT_DIR)
 
 %.o: %.c fdf.h
 	$(CC) $(CFLAGS) -c $< -o $@

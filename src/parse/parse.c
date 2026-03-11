@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 13:37:39 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/11 08:40:56 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,23 @@ static int	ensure_capacity(t_row ***rows, int *cap, int height, char *line)
 static int	read_all_rows(int fd, t_row ***rows, t_map *m)
 {
 	char	*line;
+	t_row	**tmp;
 	int		cap;
 
 	cap = 1024;
 	*rows = malloc(sizeof(t_row *) * cap);
 	if (!*rows)
 		return (print_error("Allocation error"), -1);
+	tmp = *rows;
 	line = get_next_line(fd);
 	while (line)
 	{
 		if (ensure_capacity(rows, &cap, m->height, line) < 0)
 			return (-1);
-		(*rows)[m->height] = parse_line(line, &m->width);
+		tmp = *rows;
+		tmp[m->height] = parse_line(line, &m->width);
 		free(line);
-		if (!(*rows)[m->height])
+		if (!tmp[m->height])
 			return (gnl_drain(fd), -1);
 		m->height++;
 		line = get_next_line(fd);

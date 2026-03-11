@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 02:15:18 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 14:13:07 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/11 09:17:00 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	fill_row_fast(char *line, int *z, int *color, int width)
 		p++;
 	while (*p && *p != '\n' && x < width)
 	{
-		if (!parse_token(&p, &z[x], &color[x]))
+		if (!validate_token(&p, &z[x], &color[x]))
 			return (0);
 		x++;
 	}

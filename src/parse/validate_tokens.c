@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/10 14:10:58 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 14:33:54 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/11 09:39:00 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	skip_color(char **p, int *color)
 	return (1);
 }
 
-int	parse_token(char **p, int *z_val, int *color_val)
+int	validate_token(char **p, int *z_val, int *color_val)
 {
 	if (!is_valid_int(*p))
 		return (print_error("Invalid token"), 0);
