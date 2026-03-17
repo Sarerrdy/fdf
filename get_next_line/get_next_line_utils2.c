@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   get_next_line_utils2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/07 15:50:56 by eina              #+#    #+#             */
-/*   Updated: 2026/03/14 21:50:07 by eina             ###   ########.fr       */
+/*   Created: 2026/03/17 10:06:05 by eina              #+#    #+#             */
+/*   Updated: 2026/03/17 14:52:59 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
+#include "get_next_line.h"
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
+char	*handle_eof(char **databasin)
+{
+	char	*line;
+
+	if (*databasin && **databasin)
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
-		i++;
+		line = *databasin;
+		*databasin = NULL;
+		return (line);
 	}
-	if ((char)c == '\0')
-		return ((char *)&s[i]);
-	return (0);
+	free(*databasin);
+	*databasin = NULL;
+	return (NULL);
 }

@@ -16,9 +16,12 @@ SRCS = \
     src/project/project.c \
     src/control/control.c \
     src/utils/cleanup.c \
+    src/utils/cleanup2.c \
     src/utils/error.c \
     get_next_line/get_next_line.c \
     get_next_line/get_next_line_utils.c \
+    get_next_line/get_next_line_utils2.c \
+    get_next_line/gnl_cleanup.c \
     main.c
 
 OBJS = $(SRCS:.c=.o)

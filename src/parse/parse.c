@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/11 13:24:22 by eina              #+#    #+#             */
-/*   Updated: 2026/03/11 08:40:56 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/17 14:39:13 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,11 @@ static t_row	*parse_line(char *line, int *width)
 	if (!r)
 		return (print_error("Allocation error"), NULL);
 	if (!fill_row_fast(line, r->z, r->color, w))
-	{
-		free(r->z);
-		free(r->color);
-		free(r);
-		return (NULL);
-	}
+		return (free_row(r, 1));
 	return (r);
 }
 
-static int	ensure_capacity(t_row ***rows, int *cap, int height, char *line)
+static int	ensure_capacity(t_row ***rows, int *cap, int height)
 {
 	t_row	**tmp;
 
@@ -47,7 +42,7 @@ static int	ensure_capacity(t_row ***rows, int *cap, int height, char *line)
 	tmp = ft_realloc(*rows, sizeof(t_row *) * (*cap / 2), sizeof(t_row *)
 			* (*cap));
 	if (!tmp)
-		return (free(line), print_error("Realloc failed"), -1);
+		return (print_error("Realloc failed"), -1);
 	*rows = tmp;
 	return (1);
 }
@@ -57,25 +52,27 @@ static int	read_all_rows(int fd, t_row ***rows, t_map *m)
 	char	*line;
 	t_row	**tmp;
 	int		cap;
+	int		st;
 
 	cap = 1024;
 	*rows = malloc(sizeof(t_row *) * cap);
 	if (!*rows)
 		return (print_error("Allocation error"), -1);
-	tmp = *rows;
-	line = get_next_line(fd);
-	while (line)
+	line = gnl_with_status(fd, &st);
+	while (st == 1 && line)
 	{
-		if (ensure_capacity(rows, &cap, m->height, line) < 0)
-			return (-1);
+		if (ensure_capacity(rows, &cap, m->height) < 0)
+			return (line = free_str(line), gnl_drain(fd), -1);
 		tmp = *rows;
 		tmp[m->height] = parse_line(line, &m->width);
-		free(line);
+		line = free_str(line);
 		if (!tmp[m->height])
 			return (gnl_drain(fd), -1);
 		m->height++;
-		line = get_next_line(fd);
+		line = gnl_with_status(fd, &st);
 	}
+	if (st == -1)
+		return (gnl_drain(fd), print_error("Read error"), -1);
 	return (1);
 }
 
@@ -83,14 +80,12 @@ static int	finalize_map(t_map *m, t_row **rows)
 {
 	int	y;
 
-	m->z = malloc(sizeof(int *) * m->height);
-	m->color = malloc(sizeof(int *) * m->height);
-	if (!m->z || !m->color)
-	{
-		free(m->z);
-		free(m->color);
-		return (print_error("Allocation error"), -1);
-	}
+	m->z = ft_calloc(m->height, sizeof(int *));
+	if (!m->z)
+		return (error_ret_int("Allocation error"));
+	m->color = ft_calloc(m->height, sizeof(int *));
+	if (!m->color)
+		return (free_map(m), error_ret_int("Allocation error"));
 	y = 0;
 	while (y < m->height)
 	{
@@ -106,18 +101,21 @@ int	parse_map(char *file, t_map *m)
 	t_row	**rows;
 	int		fd;
 
+	rows = NULL;
+	m->z = NULL;
+	m->color = NULL;
+	m->height = 0;
+	m->width = -1;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (error_ret_int("Cannot open file"));
-	m->height = 0;
-	m->width = -1;
 	if (read_all_rows(fd, &rows, m) == -1)
 		return (close(fd), free_row_array(rows, m->height, -1), -1);
 	close(fd);
 	if (m->height == 0 || m->width == -1)
-		return (free_row_array(rows, m->height, -1), print_error("Empty map"),
-			-1);
+		return (free_row_array(rows, m->height, -1),
+			error_ret_int("Empty map"));
 	if (finalize_map(m, rows) == -1)
-		return (free_row_array(rows, m->height, -1), -1);
+		return (free_row_array(rows, m->height, -1), free_map(m), -1);
 	return (free_row_array(rows, m->height, 0), 1);
 }

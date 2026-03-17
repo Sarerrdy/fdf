@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:35:40 by eina              #+#    #+#             */
-/*   Updated: 2026/03/11 09:17:00 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/17 16:11:04 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ int			validate_args(char *file);
 int			fill_row_fast(char *line, int *z, int *color, int width);
 t_row		*new_row(int width);
 int			count_tokens(char *p);
-void		free_row_array(t_row **rows, int count, int errflag);
 int			validate_token(char **p, int *z_val, int *color_val);
 void		gnl_drain(int fd);
 
@@ -119,6 +118,11 @@ int			error_ret_int(char *msg);
 char		*free_int_matrix(int **arr, int count);
 char		*free_char_matrix(char **arr, int count);
 char		*free_map(t_map *map);
+
+void		free_row_array(t_row **rows, int count, int errflag);
+t_row		*free_row(t_row *row, int free_payload);
+char		*free_str(char *s);
+
 void		cleanup_fdf(t_fdf *fdf);
 int			close_window(t_fdf *fdf);
 

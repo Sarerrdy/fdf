@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   gnl_cleanup.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/07 15:50:56 by eina              #+#    #+#             */
-/*   Updated: 2026/03/14 21:50:07 by eina             ###   ########.fr       */
+/*   Created: 2026/03/14 22:55:01 by eina              #+#    #+#             */
+/*   Updated: 2026/03/17 10:02:49 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
+#include "get_next_line.h"
 
-	if (!s)
-		return (0);
-	i = 0;
-	while (s[i])
+char	*ft_freeupdate(char *old, char *new, char *extra)
+{
+	if (old)
+		free(old);
+	if (new && *new == '\0')
 	{
-		if (s[i] == (char)c)
-			return ((char *)&s[i]);
-		i++;
+		free(new);
+		new = NULL;
 	}
-	if ((char)c == '\0')
-		return ((char *)&s[i]);
-	return (0);
+	if (extra)
+		free(extra);
+	return (new);
 }

@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/05 02:15:18 by eina              #+#    #+#             */
-/*   Updated: 2026/03/11 09:17:00 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/14 23:20:45 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,12 @@ t_row	*new_row(int width)
 	r = malloc(sizeof(t_row));
 	if (!r)
 		return (NULL);
+	r->z = NULL;
+	r->color = NULL;
 	r->z = malloc(sizeof(int) * width);
 	r->color = malloc(sizeof(int) * width);
 	if (!r->z || !r->color)
-	{
-		free(r->z);
-		free(r->color);
-		free(r);
-		return (NULL);
-	}
+		return (free_row(r, 1));
 	r->width = width;
 	return (r);
 }
@@ -71,11 +68,12 @@ t_row	*new_row(int width)
 void	gnl_drain(int fd)
 {
 	char	*tmp;
+	int		st;
 
-	tmp = get_next_line(fd);
-	while (tmp)
+	tmp = gnl_with_status(fd, &st);
+	while (st == 1 && tmp)
 	{
-		free(tmp);
-		tmp = get_next_line(fd);
+		tmp = free_str(tmp);
+		tmp = gnl_with_status(fd, &st);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: eina <eina@student.42vienna.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 21:45:28 by eina              #+#    #+#             */
-/*   Updated: 2026/03/10 16:04:58 by eina             ###   ########.fr       */
+/*   Updated: 2026/03/17 16:41:22 by eina             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	init_mlx(t_fdf *fdf)
 {
 	fdf->mlx = mlx_init();
 	if (!fdf->mlx)
-		return (error_ret_int("MLX init failed"));
+		return (cleanup_fdf(fdf), error_ret_int("MLX init failed"));
 	fdf->win = mlx_new_window(fdf->mlx, WIDTH, HEIGHT, "FDF");
 	if (!fdf->win)
 		return (cleanup_fdf(fdf), error_ret_int("MLX window failed"));
@@ -97,7 +97,7 @@ int	main(int argc, char **argv)
 		return (error_ret_int("Invalid args"));
 	fdf = (t_fdf){0};
 	if (parse_map(argv[1], &fdf.map) == -1)
-		return (-1);
+		return (cleanup_fdf(&fdf), -1);
 	compute_z_range(&fdf);
 	init_defaults(&fdf);
 	if (init_mlx(&fdf) == -1)
@@ -107,5 +107,5 @@ int	main(int argc, char **argv)
 	mlx_key_hook(fdf.win, handle_key, &fdf);
 	mlx_hook(fdf.win, 17, 0, close_window, &fdf);
 	mlx_loop(fdf.mlx);
-	return (0);
+	return (cleanup_fdf(&fdf), 0);
 }
